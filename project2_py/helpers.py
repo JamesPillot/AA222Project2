@@ -201,12 +201,14 @@ def test_optimize(optimize):
     for test in [Simple1, Simple2, Simple3]:
 
         p = test()
+        
         print('Testing on %s...' % p.prob)
 
         solution_feasible = []
         any_count_exceeded = False
         for seed in tqdm(range(500)):
             p = test()
+            # p.nolimit() # for debug
             np.random.seed(seed)
             x0 = p.x0()
             xb = optimize(p.f, p.g, p.c, x0, p.n, p.count, p.prob)

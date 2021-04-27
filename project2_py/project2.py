@@ -56,12 +56,8 @@ def p_quadratic(c_eval, h_eval):
     max_vec = np.maximum(c_eval, zer_vec)
     p = (np.linalg.norm(max_vec)**2) + (np.linalg.norm(h_eval)**2)
     return p
-# def penalty_method_quadratic(f, g, c, jac_c_t, x, min_func, alpha, beta, v, pro, gamma):
-#     c_eval = c(x)
-#     zer_vec = np.zeros(len(c_eval))
-#     c_prime = 2*np.sum(jac_c_t*np.maximum(c_eval, zer_vec))
-#     x_next, v_next = min_func(g, x, v, alpha, beta, c_prime, pro)
-#     return x_next, v_next
+
+
     
 
 
@@ -90,13 +86,13 @@ def optimize(f, g, c, x0, n, count, prob):
             alpha = .1222
             B = .55
             gamma = 2
-
+            # evaluate constraints
             c_eval = c(x_last)
+            # impose quadratic penalty 
             p = p_quadratic(c_eval, 0)
             if(p == 0):
                 return x_last
-
-            # Gradients and Jacobian of constraints
+            # Gradients and Jacobian of constraints for quadratic penalty
             c1_grad = np.array([1, 2*x_last[1]])
             c2_grad = np.array([-1, -1])
             jac_c = np.array([c1_grad, c2_grad])
@@ -104,11 +100,33 @@ def optimize(f, g, c, x0, n, count, prob):
             c_eval = c(x_last)
             zer_vec = np.zeros(len(c_eval))
             c_prime = 2*np.sum(jac_c_t*np.maximum(c_eval, zer_vec))
-            # Minimize with quadratic penalty
-            # breakpoint()
-
+            # Minimize with nesterov penalty
             x_next, v_next = nesterov_momentum(g, x_last, v_last, alpha, B, c_prime, pro)
-
+            # Update pro and x, v values for minimizer (nesterov)
+            pro *= gamma
+            x_last = x_next
+            v_last = v_next
+        elif prob == "simple2":
+            # Hyperparameters
+            alpha = .13
+            B = 1.05 
+            gamma = 2
+            # evaluate constraints
+            c_eval = c(x_last)
+            # impose quadratic penalty 
+            p = p_quadratic(c_eval, 0)
+            if(p == 0):
+                return x_last
+            # Gradients and Jacobian of constraints for quadratic penalty
+            c1_grad = np.array([3*(x_last[0]-1)**2, -1])
+            c2_grad = np.array([1, 1])
+            jac_c = np.array([c1_grad, c2_grad])
+            jac_c_t = np.transpose(jac_c)
+            c_eval = c(x_last)
+            zer_vec = np.zeros(len(c_eval))
+            c_prime = 2*np.sum(jac_c_t*np.maximum(c_eval, zer_vec))
+            # Minimize with nesterov penalty
+            x_next, v_next = nesterov_momentum(g, x_last, v_last, alpha, B, c_prime, pro)
             # Update pro and x, v values for minimizer (nesterov)
             pro *= gamma
             x_last = x_next

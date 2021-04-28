@@ -103,9 +103,6 @@ def simulated_annealing_penalty(f, c, p, pro, x, T, t, kmax):
     
     return x_best
 
-
-    
-
 def optimize(f, g, c, x0, n, count, prob):
     """
     Args:
@@ -143,13 +140,7 @@ def optimize(f, g, c, x0, n, count, prob):
             pro *= gamma
             if p_quadratic(x_best, c) == 0:
                 return x_best
-            # T = len(x_last)
-            # t = 1
-            # kmax = 1
-            # x_best = simulated_annealing_penalty(f, c, p_quadratic, pro, x_last, T, t, kmax)
-            # pro *= gamma
-            # if p_quadratic(x_best, c) == 0:
-            #     return x_best
+
         elif prob == "simple3":
             alpha = .5
             gamma = 8
@@ -157,6 +148,7 @@ def optimize(f, g, c, x0, n, count, prob):
             pro *= gamma
             if p_quadratic(x_best, c) == 0:
                 return x_best
+                
         elif prob == "secret1":
             alpha = .5
             gamma = 8
@@ -166,20 +158,6 @@ def optimize(f, g, c, x0, n, count, prob):
                 return x_best
 
         elif prob == "secret2": 
-            # alpha = .5
-            # gamma = 20
-            # x_best = Hooke_Jeeves_penalty(f, c, p_quadratic, pro, x_last, alpha, hooke_eps)
-            # pro *= gamma
-            # if p_quadratic(x_best, c) == 0:
-            #     return x_best
-            # alpha = 50
-            # gamma = 200
-            # while(delta > eps):
-            #     x_best = Hooke_Jeeves_penalty(f, c, p_inv_barrier, 1/pro, x_last, alpha, hooke_eps)
-            #     delta = np.linalg.norm(x_best - x_last)
-            #     x_last = x_best
-            #     pro *= gamma
-            # return x_best
             T = len(x_last)
             t = 1
             kmax = 1

@@ -165,7 +165,7 @@ def optimize(f, g, c, x0, n, count, prob):
 
         elif prob == "secret2": 
             alpha = .5
-            gamma = 8
+            gamma = 20
             while(delta > eps):
                 x_best = Hooke_Jeeves_penalty(f, c, p_inv_barrier, 1/pro, x_last, alpha, hooke_eps)
                 delta = np.linalg.norm(x_best - x_last)

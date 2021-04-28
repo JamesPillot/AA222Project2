@@ -88,9 +88,21 @@ def Hooke_Jeeves_penalty(f, c, p, pro, x, alpha, hooke_epsilon, gamma = .5):
     
     return x
 
-# def simulated_annealing_penalty(f, c, p, pro, x, T, t):
-#     y = f(x) + pro*p(x, c)
-#     x_best, y_best = x,y
+def simulated_annealing_penalty(f, c, p, pro, x, T, t, kmax):
+    y = f(x) + pro*p(x, c)
+    x_best, y_best = x, y
+    for k in range(kmax):
+        x_prime = x + np.random.standard_normal(T)
+        y_prime = f(x_prime) + pro*p(x_prime, c)
+        delt_y = y_prime - y
+        if (delt_y <= 0 or np.random.rand() < np.exp(-delt_y/t)):
+            x, y = x_prime, y_prime
+        if (y_prime < y_best):
+            x_best, y_best = x_prime, y_prime
+        t *= (1/(k+1))
+    
+    return x_best
+
 
     
 
@@ -131,6 +143,13 @@ def optimize(f, g, c, x0, n, count, prob):
             pro *= gamma
             if p_quadratic(x_best, c) == 0:
                 return x_best
+            # T = len(x_last)
+            # t = 1
+            # kmax = 1
+            # x_best = simulated_annealing_penalty(f, c, p_quadratic, pro, x_last, T, t, kmax)
+            # pro *= gamma
+            # if p_quadratic(x_best, c) == 0:
+            #     return x_best
         elif prob == "simple3":
             alpha = .5
             gamma = 8
@@ -153,14 +172,22 @@ def optimize(f, g, c, x0, n, count, prob):
             # pro *= gamma
             # if p_quadratic(x_best, c) == 0:
             #     return x_best
-            alpha = 50
-            gamma = 200
-            while(delta > eps):
-                x_best = Hooke_Jeeves_penalty(f, c, p_inv_barrier, 1/pro, x_last, alpha, hooke_eps)
-                delta = np.linalg.norm(x_best - x_last)
-                x_last = x_best
-                pro *= gamma
-            return x_best
+            # alpha = 50
+            # gamma = 200
+            # while(delta > eps):
+            #     x_best = Hooke_Jeeves_penalty(f, c, p_inv_barrier, 1/pro, x_last, alpha, hooke_eps)
+            #     delta = np.linalg.norm(x_best - x_last)
+            #     x_last = x_best
+            #     pro *= gamma
+            # return x_best
+            T = len(x_last)
+            t = 1
+            kmax = 1
+            x_best = simulated_annealing_penalty(f, c, p_quadratic, pro, x_last, T, t, kmax)
+            pro *= gamma
+            if p_quadratic(x_best, c) == 0:
+                return x_best
+                
         else:
             return float("nan")
             

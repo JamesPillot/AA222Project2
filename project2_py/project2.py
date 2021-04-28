@@ -88,6 +88,9 @@ def Hooke_Jeeves_penalty(f, c, p, pro, x, alpha, hooke_epsilon, gamma = .5):
     
     return x
 
+def simulated_annealing_penalty(f, c, p, pro, x, T, t):
+
+
 
 
     
@@ -152,7 +155,7 @@ def optimize(f, g, c, x0, n, count, prob):
             # pro *= gamma
             # if p_quadratic(x_best, c) == 0:
             #     return x_best
-            alpha = .5
+            alpha = 50
             gamma = 200
             while(delta > eps):
                 x_best = Hooke_Jeeves_penalty(f, c, p_inv_barrier, 1/pro, x_last, alpha, hooke_eps)

@@ -159,19 +159,25 @@ def optimize(f, g, c, x0, n, count, prob):
             alpha = .5
             gamma = 8
             x_best = Hooke_Jeeves_penalty(f, c, p_quadratic, pro, x_last, alpha, hooke_eps)
-            pro *= 8
+            pro *= gamma
             if p_quadratic(x_best, c) == 0:
                 return x_best
 
         elif prob == "secret2": 
             alpha = .5
-            gamma = 20
-            while(delta > eps):
-                x_best = Hooke_Jeeves_penalty(f, c, p_inv_barrier, 1/pro, x_last, alpha, hooke_eps)
-                delta = np.linalg.norm(x_best - x_last)
-                x_last = x_best
-                pro *= gamma
-            return x_best
+            gamma = 8
+            x_best = Hooke_Jeeves_penalty(f, c, p_quadratic, pro, x_last, alpha, hooke_eps)
+            pro *= gamma
+            if p_quadratic(x_best, c) == 0:
+                return x_best
+            # alpha = .5
+            # gamma = 20
+            # while(delta > eps):
+            #     x_best = Hooke_Jeeves_penalty(f, c, p_inv_barrier, 1/pro, x_last, alpha, hooke_eps)
+            #     delta = np.linalg.norm(x_best - x_last)
+            #     x_last = x_best
+            #     pro *= gamma
+            # return x_best
         else:
             return float("nan")
             

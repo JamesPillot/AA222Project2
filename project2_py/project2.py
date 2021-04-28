@@ -68,23 +68,6 @@ def p_count(c_eval, h_eval):
 def basis(i,n):
     return [1.0 if k == i else 0.0 for k in range(n)]
 
-# def Powell_Method(f, x , powell_eps, alpha):
-#     n = len(x)
-#     U = np.array([basis(i,n) for i in range(n)])
-#     delt = np.inf
-#     while (delt > powell_eps):
-#         x_prime = x
-#         for i in range(n):
-#             d = U[i]
-#             x_prime = x + alpha*d
-#         for i in range((n-1)):
-#             U[i] = U[i+1]
-#         d = x_prime - x
-#         U[n-1] = d
-#         x_prime = x + alpha*d
-#         delt = np.linalg.norm((x_prime - x))
-#         x = x_prime
-#     return x
 
 def Hooke_Jeeves_penalty(f, c, p, pro, x, alpha, hooke_epsilon, gamma = .5):
     y = f(x) + pro*p(x, c)
@@ -130,8 +113,7 @@ def optimize(f, g, c, x0, n, count, prob):
     pro = 1
     gamma = 2
     delta = np.inf
-    eps = .01
-    powell_eps = .1
+    eps = .1
     hooke_eps = .1
 
     while(count() < n):
@@ -164,20 +146,20 @@ def optimize(f, g, c, x0, n, count, prob):
                 return x_best
 
         elif prob == "secret2": 
-            alpha = .5
-            gamma = 20
-            x_best = Hooke_Jeeves_penalty(f, c, p_quadratic, pro, x_last, alpha, hooke_eps)
-            pro *= gamma
-            if p_quadratic(x_best, c) == 0:
-                return x_best
             # alpha = .5
             # gamma = 20
-            # while(delta > eps):
-            #     x_best = Hooke_Jeeves_penalty(f, c, p_inv_barrier, 1/pro, x_last, alpha, hooke_eps)
-            #     delta = np.linalg.norm(x_best - x_last)
-            #     x_last = x_best
-            #     pro *= gamma
-            # return x_best
+            # x_best = Hooke_Jeeves_penalty(f, c, p_quadratic, pro, x_last, alpha, hooke_eps)
+            # pro *= gamma
+            # if p_quadratic(x_best, c) == 0:
+            #     return x_best
+            alpha = .5
+            gamma = 20
+            while(delta > eps):
+                x_best = Hooke_Jeeves_penalty(f, c, p_inv_barrier, 1/pro, x_last, alpha, hooke_eps)
+                delta = np.linalg.norm(x_best - x_last)
+                x_last = x_best
+                pro *= gamma
+            return x_best
         else:
             return float("nan")
             

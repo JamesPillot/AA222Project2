@@ -88,13 +88,11 @@ def Hooke_Jeeves_penalty(f, c, p, pro, x, alpha, hooke_epsilon, gamma = .5):
     
     return x
 
-def simulated_annealing_penalty(f, c, p, pro, x, T, t):
-
-
-
+# def simulated_annealing_penalty(f, c, p, pro, x, T, t):
+#     y = f(x) + pro*p(x, c)
+#     x_best, y_best = x,y
 
     
-
 
 def optimize(f, g, c, x0, n, count, prob):
     """

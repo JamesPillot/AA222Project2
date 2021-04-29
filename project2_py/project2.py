@@ -133,14 +133,14 @@ def optimize(f, g, c, x0, n, count, prob):
            pro *= gamma
            if p_quadratic(x_best, c) == 0:
                return x_best
-
+           x_last = x_best
         elif prob == "simple2":
             alpha = .5
             x_best = Hooke_Jeeves_penalty(f, c, p_quadratic, pro, x_last, alpha, hooke_eps)
             pro *= gamma
             if p_quadratic(x_best, c) == 0:
                 return x_best
-
+            x_last = x_best
         elif prob == "simple3":
             alpha = .5
             gamma = 8
@@ -148,6 +148,7 @@ def optimize(f, g, c, x0, n, count, prob):
             pro *= gamma
             if p_quadratic(x_best, c) == 0:
                 return x_best
+            x_last = x_best
                 
         elif prob == "secret1":
             alpha = .5
@@ -156,6 +157,7 @@ def optimize(f, g, c, x0, n, count, prob):
             pro *= gamma
             if p_quadratic(x_best, c) == 0:
                 return x_best
+            x_last = x_best
 
         elif prob == "secret2": 
             T = len(x_last)
@@ -165,6 +167,7 @@ def optimize(f, g, c, x0, n, count, prob):
             pro *= gamma
             if p_quadratic(x_best, c) == 0:
                 return x_best
+            x_last = x_best
                 
         else:
             return float("nan")
